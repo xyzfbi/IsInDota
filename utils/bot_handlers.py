@@ -10,7 +10,7 @@ class BotHandlers:
         self.status_manager = status_manager
     
     def register_handlers(self, dp):
-        dp.message.register(self.handle_status_request, Command(commands=["дима", "дота", "доте"]))
+        dp.message.register(self.handle_status_request, Command(commands=["дима"]))
         dp.message.register(self.handle_help, Command(commands=["help", "помощь"]))
         dp.message.register(self.handle_stats, Command(commands=["stats", "статистика"]))
     
