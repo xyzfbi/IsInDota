@@ -1,5 +1,4 @@
 from aiohttp import ClientSession
-from datetime import datetime
 from typing import Optional, Dict, Any
 import logging
 
@@ -12,7 +11,6 @@ class SteamClient:
         self.base_url = "http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/"
     
     async def get_player_summary(self, steam_id: str) -> Optional[Dict[str, Any]]:
-        """Получает информацию о игроке через Steam API"""
         url = f"{self.base_url}?key={self.api_key}&steamids={steam_id}"
         
         async with ClientSession() as session:
@@ -29,5 +27,4 @@ class SteamClient:
                 return None
     
     def is_playing_dota2(self, player_data: Dict[str, Any]) -> bool:
-        """Проверяет, играет ли игрок в Dota 2"""
         return 'gameid' in player_data and player_data['gameid'] == self.dota2_app_id 

@@ -1,5 +1,4 @@
 import asyncio
-from datetime import datetime
 from typing import Optional
 from utils.player_status_manager import PlayerStatusManager
 import logging
@@ -15,7 +14,6 @@ class BackgroundMonitor:
         self.last_status = None
     
     async def start_monitoring(self, steam_id: str):
-        """Запускает фоновый мониторинг"""
         if self.is_running:
             logger.warning("Мониторинг уже запущен")
             return
@@ -25,7 +23,6 @@ class BackgroundMonitor:
         logger.info(f"Фоновый мониторинг запущен с интервалом {self.check_interval} секунд")
     
     async def stop_monitoring(self):
-        """Останавливает фоновый мониторинг"""
         if not self.is_running:
             return
         
@@ -39,12 +36,10 @@ class BackgroundMonitor:
         logger.info("Фоновый мониторинг остановлен")
     
     async def _monitor_loop(self, steam_id: str):
-        """Основной цикл мониторинга"""
         while self.is_running:
             try:
                 current_status = await self.status_manager.get_player_status(steam_id)
                 
-                # Логируем изменения статуса
                 if current_status != self.last_status:
                     logger.info(f"Изменение статуса: {current_status}")
                     self.last_status = current_status
@@ -58,7 +53,6 @@ class BackgroundMonitor:
                 await asyncio.sleep(self.check_interval)
     
     def get_monitoring_info(self) -> dict:
-        """Возвращает информацию о состоянии мониторинга"""
         return {
             "is_running": self.is_running,
             "check_interval": self.check_interval,

@@ -13,7 +13,6 @@ class PlayerStatusManager:
         self.last_player_name: Optional[str] = None
     
     def format_duration(self, seconds: float) -> str:
-        """Форматирует время в читаемый вид"""
         hours = int(seconds // 3600)
         minutes = int((seconds % 3600) // 60)
         secs = int(seconds % 60)
@@ -26,7 +25,6 @@ class PlayerStatusManager:
             return f"{secs} сек"
     
     async def get_player_status(self, steam_id: str) -> str:
-        """Получает текущий статус игрока"""
         player_data = await self.steam_client.get_player_summary(steam_id)
         
         if not player_data:
@@ -56,9 +54,7 @@ class PlayerStatusManager:
         return self.last_known_status
     
     def get_last_status(self) -> Optional[str]:
-        """Возвращает последний известный статус"""
         return self.last_known_status
     
     def is_currently_playing(self) -> bool:
-        """Проверяет, играет ли игрок сейчас"""
         return self.player_game_start_time is not None 

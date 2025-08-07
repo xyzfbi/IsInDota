@@ -1,7 +1,5 @@
-import re
 from aiogram import types
 from aiogram.filters import Command
-from typing import List, Optional
 from utils.player_status_manager import PlayerStatusManager
 import logging
 
@@ -12,7 +10,6 @@ class BotHandlers:
         self.status_manager = status_manager
     
     def register_handlers(self, dp):
-        """Регистрирует все обработчики команд"""
         dp.message.register(self.handle_status_request, Command(commands=["дима", "дота", "доте"]))
         dp.message.register(self.handle_help, Command(commands=["help", "помощь"]))
         dp.message.register(self.handle_stats, Command(commands=["stats", "статистика"]))
@@ -20,7 +17,6 @@ class BotHandlers:
 
     
     async def handle_status_request(self, message: types.Message):
-        """Обрабатывает запрос статуса игрока"""
         try:
             from config.cfg import STEAM_ID
             status = await self.status_manager.get_player_status(STEAM_ID)
@@ -30,7 +26,6 @@ class BotHandlers:
             await message.reply("Произошла ошибка при получении статуса игрока.")
     
     async def handle_help(self, message: types.Message):
-        """Показывает справку по командам"""
         help_text = """
 🤖 **Справка по командам бота:**
 
@@ -49,7 +44,6 @@ class BotHandlers:
         await message.reply(help_text, parse_mode="Markdown")
     
     async def handle_stats(self, message: types.Message):
-        """Показывает статистику игрока"""
         try:
             from config.cfg import STEAM_ID
             status = await self.status_manager.get_player_status(STEAM_ID)

@@ -7,7 +7,6 @@ from utils.player_status_manager import PlayerStatusManager
 from utils.bot_handlers import BotHandlers
 from utils.background_monitor import BackgroundMonitor
 
-# Настройка логирования
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
@@ -16,17 +15,14 @@ logger = logging.getLogger(__name__)
 
 class DotaBot:
     def __init__(self):
-        # Инициализация компонентов
         self.steam_client = SteamClient(STEAM_API_KEY, DOTA2_APP_ID)
         self.status_manager = PlayerStatusManager(self.steam_client)
         self.bot_handlers = BotHandlers(self.status_manager)
         self.background_monitor = BackgroundMonitor(self.status_manager, check_interval=60)
         
-        # Инициализация бота
         self.bot = Bot(token=TELEGRAM_TOKEN)
         self.dp = Dispatcher()
         
-        # Регистрация обработчиков
         self.bot_handlers.register_handlers(self.dp)
     
     async def start(self):
@@ -34,10 +30,8 @@ class DotaBot:
         try:
             logger.info("Запуск Dota 2 Status Bot...")
             
-            # Запуск фонового мониторинга
             await self.background_monitor.start_monitoring(STEAM_ID)
             
-            # Запуск бота
             await self.dp.start_polling(self.bot)
             
         except Exception as e:
@@ -54,7 +48,6 @@ class DotaBot:
             logger.error(f"Ошибка при остановке бота: {e}")
 
 async def main():
-    """Главная функция"""
     bot = DotaBot()
     
     try:
