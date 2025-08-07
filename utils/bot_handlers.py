@@ -10,25 +10,14 @@ logger = logging.getLogger(__name__)
 class BotHandlers:
     def __init__(self, status_manager: PlayerStatusManager):
         self.status_manager = status_manager
-        self.trigger_words = [r'\b(дима|дота|доте)\b']
-        self.allowed_chat_types = ['group', 'supergroup']
     
     def register_handlers(self, dp):
         """Регистрирует все обработчики команд"""
-        dp.message.register(self.handle_status_request, self.is_status_trigger)
+        dp.message.register(self.handle_status_request, Command(commands=["дима", "дота", "доте"]))
         dp.message.register(self.handle_help, Command(commands=["help", "помощь"]))
         dp.message.register(self.handle_stats, Command(commands=["stats", "статистика"]))
     
-    def is_status_trigger(self, message: types.Message) -> bool:
-        """Проверяет, является ли сообщение триггером для запроса статуса"""
-        if message.chat.type not in self.allowed_chat_types:
-            return False
-        
-        if not message.text:
-            return False
-        
-        return any(re.search(pattern, message.text, re.IGNORECASE) 
-                  for pattern in self.trigger_words)
+
     
     async def handle_status_request(self, message: types.Message):
         """Обрабатывает запрос статуса игрока"""
@@ -45,11 +34,12 @@ class BotHandlers:
         help_text = """
 🤖 **Справка по командам бота:**
 
-📊 `/stats` или `/статистика` - показать статистику игрока
+🎮 `/дима`, `/дота`, `/доте` - показать статус игрока в Dota 2
+📊 `/stats` или `/статистика` - показать подробную статистику игрока
 ❓ `/help` или `/помощь` - показать эту справку
 
-💬 **Автоматические триггеры:**
-Просто упомяните "дима", "дота" или "доте" в сообщении, и бот покажет текущий статус игрока.
+💬 **Как использовать:**
+Просто напишите `/дима` в чате, и бот покажет текущий статус игрока.
 
 🎮 **Что отслеживается:**
 • Текущий статус в Dota 2
